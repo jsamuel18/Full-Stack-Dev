@@ -1,0 +1,179 @@
+#Create Database
+CREATE DATABASE school;
+
+#creating table student s
+CREATE TABLE students(
+    -> id INT PRIMARY KEY,
+    -> name VARCHAR(100),
+    -> email VARCHAR(100),
+    -> Phone VARCHAR(100),
+    -> Department VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.025 sec)
+
+#creating course table
+CREATE TABLE Course(
+    -> Course_code VARCHAR(100) PRIMARY KEY,
+    -> Course_name VARCHAR(100),
+    -> Faculty_id INT,
+    -> Student_ID INT,
+    -> Faculty_email VARCHAR(100),
+    -> FOREIGN KEY (Student_ID) REFERENCES students(id)
+    -> );
+Query OK, 0 rows affected (0.041 sec)
+
+# inserting values
+INSERT INTO students VALUES
+    -> (1,'Hemesh','hemesh22@gmail.com','9123456780','CSE'),
+    -> (2,'Aarav','aarav99@gmail.com','9234567810','CSE'),
+    -> (3,'Meghana','meghana15@gmail.com','9345678120','ECE'),
+    -> (4,'Rohit','rohit715@gmail.com','9456781230','EEE'),
+    -> (5,'Sneha','sneha88@gmail.com','9567812340','IT');
+Query OK, 5 rows affected (0.013 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+INSERT INTO Course VALUES
+    -> ('CS101','OPERATING SYSTEM',101,1,'prof_smith@vtu.edu'),
+    -> ('CS102','WEB AND MOBILE APPLICATION DEVELOPMENT',102,2,'prof_jones@vtu.edu'),
+    -> ('CS103','DATABASE MANAGEMENT',101,3,'prof_smith@vtu.edu'),
+    -> ('EC301','DIGITAL ELECTRONICS',103,4,'prof_kumar@vtu.edu'),
+    -> ('CS201','DATA STRUCTURES',104,5,'prof_leila@vtu.edu');
+Query OK, 5 rows affected (0.010 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+# viewing tables
+ SELECT* FROM students;
++----+---------+-----------------------+------------+------------+
+| id | name    | email                 | Phone      | Department |
++----+---------+-----------------------+------------+------------+
+|  1 | Hemesh  | hemesh22@gmail.com    | 9123456780 | CSE        |
+|  2 | Aarav   | aarav99@gmail.com     | 9234567810 | CSE        |
+|  3 | Meghana | meghana15@gmail.com   | 9345678120 | ECE        |
+|  4 | Rohit   | rohit715@gmail.com    | 9456781230 | EEE        |
+|  5 | Sneha   | sneha88@gmail.com     | 9567812340 | IT         |
++----+---------+-----------------------+------------+------------+
+5 rows in set (0.001 sec)
+
+SELECT*FROM Course;
++-------------+----------------------------------------+------------+------------+--------------------+
+| Course_code | Course_name                            | Faculty_id | Student_ID | Faculty_email      |
++-------------+----------------------------------------+------------+------------+--------------------+
+| CS101       | OPERATING SYSTEM                       |        101 |          1 | prof_smith@vtu.edu |
+| CS102       | WEB AND MOBILE APPLICATION DEVELOPMENT |        102 |          2 | prof_jones@vtu.edu |
+| CS103       | DATABASE MANAGEMENT                    |        101 |          3 | prof_smith@vtu.edu |
+| CS201       | DATA STRUCTURES                        |        104 |          5 | prof_leila@vtu.edu |
+| EC301       | DIGITAL ELECTRONICS                    |        103 |          4 | prof_kumar@vtu.edu |
++-------------+----------------------------------------+------------+------------+--------------------+
+5 rows in set (0.001 sec)
+
+# using SELECT queries
+ SELECT*FROM students WHERE Department='CSE';
++----+--------+--------------------+------------+------------+
+| id | name   | email              | Phone      | Department |
++----+--------+--------------------+------------+------------+
+|  1 | Hemesh | hemesh22@gmail.com | 9123456780 | CSE        |
+|  2 | Aarav  | aarav99@gmail.com  | 9234567810 | CSE        |
++----+--------+--------------------+------------+------------+
+2 rows in set (0.001 sec)
+
+SELECT*FROM Course ORDER BY Course_name ASC;
++-------------+----------------------------------------+------------+------------+--------------------+
+| Course_code | Course_name                            | Faculty_id | Student_ID | Faculty_email      |
++-------------+----------------------------------------+------------+------------+--------------------+
+| CS201       | DATA STRUCTURES                        |        104 |          5 | prof_leila@vtu.edu |
+| CS103       | DATABASE MANAGEMENT                    |        101 |          3 | prof_smith@vtu.edu |
+| EC301       | DIGITAL ELECTRONICS                    |        103 |          4 | prof_kumar@vtu.edu |
+| CS101       | OPERATING SYSTEM                       |        101 |          1 | prof_smith@vtu.edu |
+| CS102       | WEB AND MOBILE APPLICATION DEVELOPMENT |        102 |          2 | prof_jones@vtu.edu |
++-------------+----------------------------------------+------------+------------+--------------------+
+5 rows in set (0.001 sec)
+
+SELECT name,email FROM students WHERE email like '%gmail.com';
++---------+-----------------------+
+| name    | email                 |
++---------+-----------------------+
+| Hemesh  | hemesh22@gmail.com    |
+| Aarav   | aarav99@gmail.com     |
+| Meghana | meghana15@gmail.com   |
+| Rohit   | rohit715@gmail.com    |
+| Sneha   | sneha88@gmail.com     |
++---------+-----------------------+
+5 rows in set (0.001 sec)
+
+SELECT*FROM students LIMIT 3;
++----+---------+-----------------------+------------+------------+
+| id | name    | email                 | Phone      | Department |
++----+---------+-----------------------+------------+------------+
+|  1 | Hemesh  | hemesh22@gmail.com    | 9123456780 | CSE        |
+|  2 | Aarav   | aarav99@gmail.com     | 9234567810 | CSE        |
+|  3 | Meghana | meghana15@gmail.com   | 9345678120 | ECE        |
++----+---------+-----------------------+------------+------------+
+3 rows in set (0.001 sec)
+
+SELECT Department,COUNT(*) as Total_Students
+    -> FROM students
+    -> GROUP BY Department
+    -> HAVING COUNT(*)>1;
++------------+----------------+
+| Department | Total_Students |
++------------+----------------+
+| CSE        |              2 |
++------------+----------------+
+1 row in set (0.001 sec)
+
+SELECT COUNT(*) AS Total_Students FROM students;
++----------------+
+| Total_Students |
++----------------+
+|              5 |
++----------------+
+1 row in set (0.001 sec)
+
+SELECT COUNT(DISTINCT Department) AS Department_Count FROM students;
++------------------+
+| Department_Count |
++------------------+
+|                4 |
++------------------+
+1 row in set (0.001 sec)
+
+#JOIN QUERIES
+
+#INNER JOIN
+SELECT s.id,s.name AS Student_Name,c.Course_name,c.Faculty_id,c.Faculty_email FROM students s INNER JOIN Course c ON s.id=c.Student_ID;
++----+--------------+----------------------------------------+------------+--------------------+
+| id | Student_Name | Course_name                            | Faculty_id | Faculty_email      |
++----+--------------+----------------------------------------+------------+--------------------+
+|  1 | Hemesh       | OPERATING SYSTEM                       |        101 | prof_smith@vtu.edu |
+|  2 | Aarav        | WEB AND MOBILE APPLICATION DEVELOPMENT |        102 | prof_jones@vtu.edu |
+|  3 | Meghana      | DATABASE MANAGEMENT                    |        101 | prof_smith@vtu.edu |
+|  5 | Sneha        | DATA STRUCTURES                        |        104 | prof_leila@vtu.edu |
+|  4 | Rohit        | DIGITAL ELECTRONICS                    |        103 | prof_kumar@vtu.edu |
++----+--------------+----------------------------------------+------------+--------------------+
+5 rows in set (0.001 sec)
+
+#LEFT JOIN
+ SELECT s.id,s.name AS Student_Name,c.Course_name FROM students s LEFT JOIN Course c ON s.id=c.Student_ID;
++----+--------------+----------------------------------------+
+| id | Student_Name | Course_name                            |
++----+--------------+----------------------------------------+
+|  1 | Hemesh       | OPERATING SYSTEM                       |
+|  2 | Aarav        | WEB AND MOBILE APPLICATION DEVELOPMENT |
+|  3 | Meghana      | DATABASE MANAGEMENT                    |
+|  5 | Sneha        | DATA STRUCTURES                        |
+|  4 | Rohit        | DIGITAL ELECTRONICS                    |
++----+--------------+----------------------------------------+
+5 rows in set (0.001 sec)
+
+#RIGHT JOIN
+SELECT s.id,s.name AS Student_Name,c.Course_name FROM students s RIGHT JOIN Course c ON s.id=c.Student_ID;
++------+--------------+----------------------------------------+
+| id   | Student_Name | Course_name                            |
++------+--------------+----------------------------------------+
+|    1 | Hemesh       | OPERATING SYSTEM                       |
+|    2 | Aarav        | WEB AND MOBILE APPLICATION DEVELOPMENT |
+|    3 | Meghana      | DATABASE MANAGEMENT                    |
+|    5 | Sneha        | DATA STRUCTURES                        |
+|    4 | Rohit        | DIGITAL ELECTRONICS                    |
++------+--------------+----------------------------------------+
+5 rows in set (0.001 sec)
